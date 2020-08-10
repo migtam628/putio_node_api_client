@@ -1,0 +1,31 @@
+{
+  "name": "putio_api_client",
+  "version": "1.0.0",
+  "description": "PutIO Node Client",
+  "main": "putio.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/migtam628/putio_node_api_client.git"
+  },
+  "keywords": [
+    "Putio",
+    "NodeJS",
+    "API",
+    "Client"
+  ],
+  "author": "Mig Tam Rod",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/migtam628/putio_node_api_client/issues"
+  },
+  "homepage": "https://github.com/migtam628/putio_node_api_client#readme",
+  "dependencies": {
+    "@putdotio/api-client": "^8.6.1",
+    "@types/node": "^14.0.27",
+    "express": "^4.17.1",
+    "putiosdk": "^0.1.8"
+  }
+}
