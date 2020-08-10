@@ -3,6 +3,9 @@ const express = require("express");
 const app = express();
 
 // First Step
+/* 
+    /login?client_id=1234&client_secret=XYZ&token=XYZ&username=user@gmail.com&password=pass123
+*/
 app.get("/login", (req, res) => {
   let username = req.query.username;
   let client_id = req.query.client_id;
@@ -25,6 +28,9 @@ app.get("/login", (req, res) => {
 });
 
 // Second Step
+/* 
+    /add?client_id=1234&token=XYZ&url=magnet:?xt=urn:btih:2565FA368FA317C90B2A3E7925CDE8F58FF99410
+*/
 app.get("/add", (req, res) => {
   let token = req.query.token;
   let client_id = req.query.client_id;
@@ -41,8 +47,11 @@ app.get("/add", (req, res) => {
 });
 
 // Third Step
+/* 
+    /transfer-info?client_id=1234&token=XYZ&transfer_id=6544251
+*/
 app.get("/transfer-info", (req, res) => {
-  let id = req.query.id;
+  let id = req.query.transfer_id;
   let token = req.query.token;
   let client_id = req.query.client_id;
   const API = new PutioAPI({ clientID: client_id });
@@ -56,6 +65,9 @@ app.get("/transfer-info", (req, res) => {
 });
 
 // Stream
+/* 
+    /stream?client_id=1234&token=XYZ&transfer_id=6544251
+*/
 app.get("/stream", (req, res) => {
   let id = req.query.id;
   let token = req.query.token;
@@ -67,6 +79,10 @@ app.get("/stream", (req, res) => {
 });
 
 // Download Link
+/* 
+    Multiple Files: /download?client_id=1234&token=XYZ&ids=75476343,75478993
+    Single File: /download?client_id=1234&token=XYZ&ids=75476343
+*/
 app.get("/download", (req, res, next) => {
   let token = req.query.token;
   let client_id = req.query.client_id;
@@ -82,9 +98,10 @@ app.get("/download", (req, res, next) => {
     .catch((err) => res.json(err));
 });
 
-
-
 // Optional
+/* 
+    /logout?client_id=1234&token=XYZ
+*/
 app.get("/logout", (req, res) => {
   let token = req.query.token;
   let client_id = req.query.client_id;
@@ -98,7 +115,6 @@ app.get("/logout", (req, res) => {
     })
     .catch((err) => res.json(err));
 });
-
 
 app.listen(3000);
 console.log("http://localhost:3000");
