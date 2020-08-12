@@ -1,6 +1,6 @@
 {
   "name": "putio_api_client",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "PutIO Node Client",
   "main": "putio.js",
   "scripts": {
@@ -25,7 +25,9 @@
   "dependencies": {
     "@putdotio/api-client": "^8.6.1",
     "@types/node": "^14.0.27",
+    "axios": "^0.19.2",
     "express": "^4.17.1",
+    "node-fetch": "^2.6.0",
     "putiosdk": "^0.1.8"
   }
 }

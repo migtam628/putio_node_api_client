@@ -1,6 +1,95 @@
 const PutioAPI = require("@putdotio/api-client").default;
 const express = require("express");
 const app = express();
+const axios = require("axios");
+
+/* 
+  Movies: http://localhost:3000/?type=movies&client_id=1234&token=XXYYZZXXYYZZXXYYZZXX&imdb_id=tt0848228&quality=1080p
+  Shows: http://localhost:3000/?type=tv&client_id=1234&token=XXYYZZXXYYZZXXYYZZXX&s=04&e=01&title=game+of+thrones
+*/
+app.get("/media_stream", (req, res) => {
+  // let url = req.query.url;
+  let id = req.query.imdb_id;
+  let title = req.query.title;
+  let quality = req.query.quality;
+  let e = req.query.e;
+  let s = req.query.s;
+  let type = req.query.type;
+  let client_id = req.query.client_id;
+  let token = req.query.token;
+  const API = new PutioAPI({ clientID: client_id });
+  API.setToken(token);
+
+  if (type === "tv") {
+    axios(
+      `http://185.186.244.195:5000/xtorrent?type=TV&title=${title}&s=${s}&e=${e}`
+    )
+      .then((r) => {
+        let url = String(r.data.data.main_result.magnet).split("&dn=");
+
+        console.log(url[0]);
+
+        API.Transfers.Add({ url: url })
+          .then(({ status, body }) => {
+            if (status === 200) {
+              let id = body.transfer.id;
+              API.Transfers.Get(id)
+                .then(({ status, body }) => {
+                  if (status === 200) {
+                    let id = body.transfer.file_id;
+                    API.Files.DownloadLinks({ ids: [id] })
+                      .then(({ status, statusText, body, data }) => {
+                        if (status === 200) res.json(body);
+                        else if (status === 400) res.json(data);
+                      })
+                      .catch((err) => res.json(err));
+                  }
+                })
+                .catch((err) => res.json(err));
+            }
+          })
+          .catch((err) => res.json(err));
+      })
+      .catch((e) => {
+        res.json(e);
+      });
+  } else if (type === "movies") {
+    axios("http://185.186.244.195:5000/imdb-torrent-search?id=" + id)
+      .then((r) => {
+        let torrent = r.data.data;
+        let movie =
+          torrent.movie_count === 1 ? torrent.movies[0] : torrent.movies;
+        // let url = ''
+        movie?.torrents.forEach((torrent) => {
+          if (torrent.quality === quality) {
+            let url = torrent.url;
+            API.Transfers.Add({ url: url })
+              .then(({ status, body }) => {
+                if (status === 200) {
+                  let id = body.transfer.id;
+                  API.Transfers.Get(id)
+                    .then(({ status, body }) => {
+                      if (status === 200) {
+                        let id = body.transfer.file_id;
+                        API.Files.DownloadLinks({ ids: [id] })
+                          .then(({ status, statusText, body, data }) => {
+                            if (status === 200) res.json(body);
+                            else if (status === 400) res.json(data);
+                          })
+                          .catch((err) => res.json(err));
+                      }
+                    })
+                    .catch((err) => res.json(err));
+                }
+              })
+              .catch((err) => res.json(err));
+          }
+        });
+      })
+      .catch((e) => res.json(e));
+  } else if (type === "anime") {
+  }
+});
 
 // First Step
 /* 
