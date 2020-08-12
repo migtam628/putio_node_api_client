@@ -1,6 +1,6 @@
 {
   "name": "putio_api_client",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "PutIO Node Client",
   "main": "putio.js",
   "scripts": {

@@ -3,6 +3,13 @@ const express = require("express");
 const app = express();
 const axios = require("axios");
 
+let allowCrossDomain = function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', "*");
+  res.header('Access-Control-Allow-Headers', "*");
+  next();
+}
+app.use(allowCrossDomain);
+
 /* 
   Movies: http://localhost:3000/?type=movies&client_id=1234&token=XXYYZZXXYYZZXXYYZZXX&imdb_id=tt0848228&quality=1080p
   Shows: http://localhost:3000/?type=tv&client_id=1234&token=XXYYZZXXYYZZXXYYZZXX&s=04&e=01&title=game+of+thrones
